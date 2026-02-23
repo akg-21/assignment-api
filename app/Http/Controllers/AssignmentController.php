@@ -20,7 +20,16 @@ class AssignmentController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'assignments' => $assignments
+                    'assignments' => $assignments->map(function ($assignment) {
+                        return [
+                            'id' => $assignment->id,
+                            'title' => $assignment->title,
+                            'description' => $assignment->description,
+                            'subject' => $assignment->subject,
+                            'status' => $assignment->status,
+                            'user_id' => $assignment->user_id
+                        ];
+                    })
                 ]
             ], 200);
         } catch (Exception $e) {
@@ -63,7 +72,14 @@ class AssignmentController extends Controller
                 'success' => true,
                 'message' => 'Assignment created successfully',
                 'data' => [
-                    'assignment' => $assignment
+                    'assignment' => [
+                        'id' => $assignment->id,
+                        'title' => $assignment->title,
+                        'description' => $assignment->description,
+                        'subject' => $assignment->subject,
+                        'status' => $assignment->status,
+                        'user_id' => $assignment->user_id
+                    ]
                 ]
             ], 201);
         } catch (Exception $e) {
@@ -117,7 +133,12 @@ class AssignmentController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'assignment' => $assignment
+                    'id' => $assignment->id,
+                    'title' => $assignment->title,
+                    'description' => $assignment->description,
+                    'subject' => $assignment->subject,
+                    'status' => $assignment->status,
+                    'user_id' => $assignment->user_id
                 ]
             ], 200);
         } catch (Exception $e) {
@@ -195,7 +216,14 @@ class AssignmentController extends Controller
                 'success' => true,
                 'message' => 'Assignment updated successfully',
                 'data' => [
-                    'assignment' => $assignment
+                    'assignment' => [
+                        'id' => $assignment->id,
+                        'title' => $assignment->title,
+                        'description' => $assignment->description,
+                        'subject' => $assignment->subject,
+                        'status' => $assignment->status,
+                        'user_id' => $assignment->user_id
+                    ]
                 ]
             ], 200);
         } catch (Exception $e) {

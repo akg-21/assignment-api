@@ -149,7 +149,11 @@ class AuthController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'user' => $request->user()
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'email' => $request->user()->email,
+                    'department' => $request->user()->department,
+                    'year' => $request->user()->year
                 ]
             ], 200);
         } catch (Exception $e) {

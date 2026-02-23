@@ -146,6 +146,28 @@ Content-Type: application/json
 }
 ```
 
+### Get Profile
+
+**Request:**
+```bash
+GET /api/auth/profile
+Authorization: Bearer 1|abc123...
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "name": "John Doe",
+        "email": "john@example.com",
+        "department": "Computer Science",
+        "year": 3
+    }
+}
+```
+
 ### Create Assignment
 
 **Request:**
