@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\AssignmentController;
 
-Route::prefix('auth')->middleware('throttle:auth')->group(function () {
+Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register'])->middleware('throttle:5,1');
     Route::post('login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 
@@ -15,7 +15,7 @@ Route::prefix('auth')->middleware('throttle:auth')->group(function () {
     });
 });
 
-Route::middleware('auth:sanctum')->prefix('assignments')->middleware('throttle:60,1')->group(function () {
+Route::prefix('assignments')->middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::get('/', [AssignmentController::class, 'index']);
     Route::post('/', [AssignmentController::class, 'store']);
     Route::get('{id}', [AssignmentController::class, 'show']);

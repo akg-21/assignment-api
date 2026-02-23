@@ -36,14 +36,6 @@ class AssignmentController extends Controller
     public function store(Request $request)
     {
         try {
-            if (!$request->user()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No authenticated user found',
-                    'error_code' => 'NOT_AUTHENTICATED'
-                ], 401);
-            }
-
             $validator = Validator::make($request->all(), [
                 'title' => 'required|string|max:255',
                 'description' => 'required|string',
@@ -95,14 +87,31 @@ class AssignmentController extends Controller
                 ], 400);
             }
 
+            if (!is_numeric($id)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid assignment ID',
+                    'error_code' => 'INVALID_ID'
+                ], 400);
+            }
+
             $assignment = $request->user()->assignments()->find($id);
 
             if (!$assignment) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Assignment not found',
+                    'message' => 'Assignment not found or access denied',
                     'error_code' => 'ASSIGNMENT_NOT_FOUND'
                 ], 404);
+            }
+
+            // Additional check: Ensure the assignment belongs to the authenticated user
+            if ($assignment->user_id !== $request->user()->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Access denied',
+                    'error_code' => 'ACCESS_DENIED'
+                ], 403);
             }
 
             return response()->json([
@@ -132,14 +141,31 @@ class AssignmentController extends Controller
                 ], 400);
             }
 
+            if (!is_numeric($id)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid assignment ID',
+                    'error_code' => 'INVALID_ID'
+                ], 400);
+            }
+
             $assignment = $request->user()->assignments()->find($id);
 
             if (!$assignment) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Assignment not found',
+                    'message' => 'Assignment not found or access denied',
                     'error_code' => 'ASSIGNMENT_NOT_FOUND'
                 ], 404);
+            }
+
+            // Additional check: Ensure the assignment belongs to the authenticated user
+            if ($assignment->user_id !== $request->user()->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Access denied',
+                    'error_code' => 'ACCESS_DENIED'
+                ], 403);
             }
 
             $validator = Validator::make($request->all(), [
@@ -198,9 +224,18 @@ class AssignmentController extends Controller
             if (!$assignment) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Assignment not found',
+                    'message' => 'Assignment not found or access denied',
                     'error_code' => 'ASSIGNMENT_NOT_FOUND'
                 ], 404);
+            }
+
+            // Additional check: Ensure the assignment belongs to the authenticated user
+            if ($assignment->user_id !== $request->user()->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Access denied',
+                    'error_code' => 'ACCESS_DENIED'
+                ], 403);
             }
 
             $assignment->delete();
