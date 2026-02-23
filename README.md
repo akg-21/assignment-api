@@ -199,3 +199,123 @@ Content-Type: application/json
     }
 }
 ```
+
+### Get Specific Assignment
+
+**Request:**
+```bash
+GET /api/assignments/1
+Authorization: Bearer 1|abc123...
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "data": {
+        "id": 1,
+        "title": "Database Design Project",
+        "description": "Create a comprehensive database schema for a library management system",
+        "subject": "Database Systems",
+        "status": "Pending",
+        "user_id": 1
+    }
+}
+```
+
+### Update Assignment
+
+**Request:**
+```bash
+PUT /api/assignments/1
+Authorization: Bearer 1|abc123...
+Content-Type: application/json
+
+{
+    "title": "Updated Database Design Project",
+    "status": "Submitted"
+}
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Assignment updated successfully",
+    "data": {
+        "id": 1,
+        "title": "Updated Database Design Project",
+        "description": "Create a comprehensive database schema for a library management system",
+        "subject": "Database Systems",
+        "status": "Submitted",
+        "user_id": 1
+    }
+}
+```
+
+### Delete Assignment
+
+**Request:**
+```bash
+DELETE /api/assignments/1
+Authorization: Bearer 1|abc123...
+```
+
+**Response:**
+```json
+{
+    "success": true,
+    "message": "Assignment deleted successfully"
+}
+```
+
+### Error Responses
+
+#### Validation Error (422)
+```json
+{
+    "success": false,
+    "message": "Validation failed",
+    "errors": {
+        "email": ["The email field is required."],
+        "password": ["The password field is required."]
+    },
+    "error_code": "VALIDATION_ERROR"
+}
+```
+
+#### Authentication Error (401)
+```json
+{
+    "success": false,
+    "message": "Invalid credentials",
+    "error_code": "INVALID_CREDENTIALS"
+}
+```
+
+#### Not Found Error (404)
+```json
+{
+    "success": false,
+    "message": "Assignment not found or access denied",
+    "error_code": "ASSIGNMENT_NOT_FOUND"
+}
+```
+
+#### Access Denied Error (403)
+```json
+{
+    "success": false,
+    "message": "Access denied",
+    "error_code": "ACCESS_DENIED"
+}
+```
+
+#### Rate Limit Error (429)
+```json
+{
+    "success": false,
+    "message": "Too many requests. Please try again later.",
+    "error_code": "TOO_MANY_REQUESTS"
+}
+```
