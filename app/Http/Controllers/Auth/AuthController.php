@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Auth\AuthenticationException;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 use Exception;
 
 class AuthController extends Controller
@@ -21,7 +21,7 @@ class AuthController extends Controller
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8|confirmed',
                 'department' => 'required|string|max:100',
-                'year' => 'required|integer|min:1|max:6',
+                'year' => 'required|integer|min:1|max:4',
             ]);
 
             if ($validator->fails()) {
@@ -41,7 +41,7 @@ class AuthController extends Controller
                 'year' => $request->year,
             ]);
 
-            $token = $user->createToken('auth_token')->plainTextToken;
+            $token = JWTAuth::fromUser($user);
 
             return response()->json([
                 'success' => true,
@@ -66,7 +66,7 @@ class AuthController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'email' => 'required|email',
-                'password' => 'required',
+                'password' => 'required|string',
             ]);
 
             if ($validator->fails()) {
@@ -78,17 +78,15 @@ class AuthController extends Controller
                 ], 422);
             }
 
-            $user = User::where('email', $request->email)->first();
+            $credentials = $request->only('email', 'password');
 
-            if (!$user || !Hash::check($request->password, $user->password)) {
+            if (!$token = JWTAuth::attempt($credentials)) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Invalid credentials',
                     'error_code' => 'INVALID_CREDENTIALS'
                 ], 401);
             }
-
-            $token = $user->createToken('auth_token')->plainTextToken;
 
             return response()->json([
                 'success' => true,
@@ -119,7 +117,7 @@ class AuthController extends Controller
                 ], 401);
             }
 
-            $request->user()->currentAccessToken()->delete();
+            JWTAuth::invalidate(JWTAuth::getToken());
 
             return response()->json([
                 'success' => true,

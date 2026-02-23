@@ -19,18 +19,17 @@ class AssignmentController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => [
-                    'assignments' => $assignments->map(function ($assignment) {
-                        return [
-                            'id' => $assignment->id,
-                            'title' => $assignment->title,
-                            'description' => $assignment->description,
-                            'subject' => $assignment->subject,
-                            'status' => $assignment->status,
-                            'user_id' => $assignment->user_id
-                        ];
-                    })
-                ]
+                'message' => $assignments->count() > 0 ? "Assignments retrieved successfully" : "No assignments found",
+                'data' =>  $assignments->map(function ($assignment) {
+                    return [
+                        'id' => $assignment->id,
+                        'title' => $assignment->title,
+                        'description' => $assignment->description,
+                        'subject' => $assignment->subject,
+                        'status' => $assignment->status,
+                        'user_id' => $assignment->user_id
+                    ];
+                })
             ], 200);
         } catch (Exception $e) {
             return response()->json([

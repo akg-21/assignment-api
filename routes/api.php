@@ -9,13 +9,13 @@ Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register'])->middleware('throttle:5,1');
     Route::post('login', [AuthController::class, 'login'])->middleware('throttle:10,1');
 
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware('auth:api')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
         Route::get('profile', [AuthController::class, 'profile']);
     });
 });
 
-Route::prefix('assignments')->middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
+Route::prefix('assignments')->middleware(['auth:api', 'throttle:60,1'])->group(function () {
     Route::get('/', [AssignmentController::class, 'index']);
     Route::post('/', [AssignmentController::class, 'store']);
     Route::get('{id}', [AssignmentController::class, 'show']);
