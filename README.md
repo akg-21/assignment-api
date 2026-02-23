@@ -190,16 +190,12 @@ Content-Type: application/json
     "success": true,
     "message": "Assignment created successfully",
     "data": {
-        "assignment": {
-            "id": 1,
-            "title": "Database Design Project",
-            "description": "Create a comprehensive database schema for a library management system",
-            "subject": "Database Systems",
-            "status": "Pending",
-            "user_id": 1,
-            "created_at": "2024-01-01T00:00:00.000000Z",
-            "updated_at": "2024-01-01T00:00:00.000000Z"
-        }
+        "id": 1,
+        "title": "Database Design Project",
+        "description": "Create a comprehensive database schema for a library management system",
+        "subject": "Database Systems",
+        "status": "Pending",
+        "user_id": 1
     }
 }
 ```
